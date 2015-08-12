@@ -1,0 +1,361 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Dive into VIM | Erica&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Erica Wu">
+    
+    <meta name="description" content="VIM命令行模式1、光标的移动
+h,j,k,,l,分别使光标向左，下，上，右移动；
+w,光标向前移动一个单词，b,光标向后移动一个单词；
+e，到下一个单词的结尾；
+0,光标移动到行首；$,光标移动到行尾；
+^,光标移动到当前行的第一个字母；
+) ，移动光标到下一个句子；
+(，移动光标到上一个句子；
+">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Erica&#39;s Blog" title="Erica&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Erica&#39;s Blog">Erica&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/11/13/Dive-into-VIM/" title="Dive into VIM" itemprop="url">Dive into VIM</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="Erica Wu">Erica Wu</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-11-13T09:43:01.000Z" itemprop="datePublished">2014-11-13</time>
+    Updated:<time datetime="2015-08-12T09:44:16.000Z" itemprop="dateModified">2015-08-12</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#VIM命令行模式"><span class="toc-number">1.</span> <span class="toc-text">VIM命令行模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、光标的移动"><span class="toc-number">1.1.</span> <span class="toc-text">1、光标的移动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、插入命令"><span class="toc-number">1.2.</span> <span class="toc-text">2、插入命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、有效移动大段文本，可视化模式"><span class="toc-number">1.3.</span> <span class="toc-text">3、有效移动大段文本，可视化模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、进阶命令"><span class="toc-number">1.4.</span> <span class="toc-text">4、进阶命令</span></a></li></ol></li></ol>
+		</div>
+		
+		<h3 id="VIM命令行模式">VIM命令行模式</h3><h4 id="1、光标的移动">1、光标的移动</h4><ul>
+<li><code>h</code>,<code>j</code>,<code>k</code>,,<code>l</code>,分别使光标向左，下，上，右移动；</li>
+<li><code>w</code>,光标向前移动一个单词，<code>b</code>,光标向后移动一个单词；</li>
+<li><code>e</code>，到下一个单词的结尾；</li>
+<li><code>0</code>,光标移动到行首；<code>$</code>,光标移动到行尾；</li>
+<li><code>^</code>,光标移动到当前行的第一个字母；</li>
+<li><code>)</code> ，移动光标到下一个句子；</li>
+<li><code>(</code>，移动光标到上一个句子；</li>
+<li><code>ctrl+f</code> ，光标移动到下一屏；</li>
+<li><code>ctrl+b</code>，光标移动到上一屏；</li>
+<li><code>G</code>， 移动到文件末尾；</li>
+<li><code>numG</code>，光标移动到指定行（eg.<code>100G</code>就是第100行），配合 <code>se number</code>,显示行号使用；</li>
+<li><code>gg</code>，移动到文件开始；</li>
+<li><code>H</code>，光标移动到屏幕上方；</li>
+<li><code>M</code>，光标移动到屏幕中间；</li>
+<li><code>L</code> ，光标移动到屏幕下方；</li>
+<li><code>*</code> ，读取光标处的字符串，并且移动光标到它再次出现的地方，向后搜索。有点类似搜索<code>/find</code>命令；</li>
+<li><code>#</code>，与<code>*</code>类似，只是向前搜索；</li>
+<li><code>/text</code>，搜索文本，重复上次的搜索按<code>n</code>；</li>
+<li><code>?text</code> ，与上面的类似，反方向；</li>
+<li><code>ma</code>，做书签标记。a代表书签名字，书签名字只能是小写字母。用户看不到书签的存在；</li>
+<li><code>`a</code>，到书签的a处；</li>
+<li><code>`.</code>，到上次编辑的地方，这个是默认的书签，不需要特别标记它。</li>
+<li><strong><code>dt&quot;</code>，删除所有内容，直到遇到双引号，这个对码农很有用!</strong></li>
+<li><strong><code>t,</code>，到逗号前的第一个字符，逗号可以是任何字符；</strong></li>
+</ul>
+<h4 id="2、插入命令">2、插入命令</h4><ul>
+<li><code>i</code>，在当前字符的左边插入；</li>
+<li><code>I</code>，在当前行首插入；</li>
+<li><code>a</code>，在当前字符的右边插入；</li>
+<li><code>A</code>，在当前行尾插入；</li>
+<li><code>o</code>，在当前行下面插入新行；</li>
+<li><code>O</code>，在当前行上面插入新行；</li>
+<li><p><code>c{motion}</code>，删除 motion 命令跨过的字符，并且进入插入模式。比如： <code>c$</code>，这将会删除从光标位置到行尾的字符并且进入插入模式。<code>ct!</code>，这会删除从光标位置到下一个叹号（但不包括），然后进入插入模式。被删除的字符被存在了剪贴板里面，并且可以再粘贴出来；</p>
+</li>
+<li><p><code>d{motion}</code>，和<code>c{motion}</code>类似，区别是不进入插入模式；</p>
+</li>
+</ul>
+<h4 id="3、有效移动大段文本，可视化模式">3、有效移动大段文本，可视化模式</h4><ul>
+<li><code>v</code>，按字符来选择大段文本可精确到字符，试试看，用<code>h</code>,<code>j</code>,<code>k</code>,,<code>l</code>来移动光标；</li>
+<li><code>V</code>，按行来选择大段文本精确到行，因此<code>h</code>,<code>l</code>,无效；</li>
+<li><code>ctrl+v</code>，块选择，这个太强大了，可以进行纵向编辑，有点像ultra editor里面的纵向编辑模式，比如想删除第一列的所有字符，用这个实在太方便了！！！</li>
+<li><code>d</code>，剪贴内容到剪贴板，但不进入插入模式；</li>
+<li><code>y</code>，拷贝内容到剪贴板；</li>
+<li><code>c</code>，剪贴内容到剪贴板，并且进入插入模式；</li>
+</ul>
+<p><strong>如果你很清楚在做什么，没必要进入可视化模式，前提是你必须知道你剪切拷贝了什么！</strong></p>
+<ul>
+<li><code>yy</code> ，拷贝当前行；</li>
+<li><code>dd</code>，剪切当前行；</li>
+<li><code>cc</code>，剪切当前行并且进入插入模式；</li>
+<li><code>D</code>，剪切当前行到行尾；</li>
+<li><code>Y</code>，拷贝当前行，同<code>yy</code>;</li>
+<li><code>C</code>, 剪切当前行到行尾并进入插入模式；</li>
+<li><code>x</code>，剪切当前字符到剪贴板；</li>
+<li><code>s</code>，与<code>x</code>，类似，但是会进入插入模式；</li>
+<li><code>p</code>，粘贴；</li>
+<li><code>.</code>，这个命令很强大，意思是重复上一次的操作；</li>
+</ul>
+<h4 id="4、进阶命令">4、进阶命令</h4><ul>
+<li>文本替换，命令<code>[range]s/from/to</code><ul>
+<li>方式一、使用可视化模式选中一段文本，比如将这段文本中的python替换成java，选中文本之后输入<code>:s/python/java</code> ，回车后发现选中文本区的内容都被替换了。</li>
+<li>方式二、先用<code>:se number</code>命令展示出行号，然后使用指定行号的方式来替换，例如<code>:40,100s/python/java</code>，标识将第40行到100行中的python替换成java。</li>
+</ul>
+</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2014/11/13/Dive-into-VIM/" data-title="Dive into VIM | Erica&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/11/15/Travel-to-New-Zealand/" title="Travel to New Zealand">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Travel to New Zealand</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#VIM命令行模式"><span class="toc-number">1.</span> <span class="toc-text">VIM命令行模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、光标的移动"><span class="toc-number">1.1.</span> <span class="toc-text">1、光标的移动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、插入命令"><span class="toc-number">1.2.</span> <span class="toc-text">2、插入命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、有效移动大段文本，可视化模式"><span class="toc-number">1.3.</span> <span class="toc-text">3、有效移动大段文本，可视化模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、进阶命令"><span class="toc-number">1.4.</span> <span class="toc-text">4、进阶命令</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/English-Blog/" title="English Blog">English Blog<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://yoursite.com" target="_blank" title="Erica Wu">Erica Wu</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
